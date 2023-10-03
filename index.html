@@ -1,0 +1,386 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.5/dist/mindar-image.prod.js"></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.5/dist/mindar-image-aframe.prod.js"></script>
+    <script>
+        var isVideoplaying = false;
+        const onFirstTagretFound = () => {
+            console.log("start onFirstTargetFound function");
+            const webButton = document.querySelector("#website-button");
+            const chatButton = document.querySelector("#chat-button");
+            const phoneButton = document.querySelector("#phone-button");
+            const contactButton = document.querySelector("#contact-button");
+            const websitePreview = document.querySelector("#website-preview");
+            const moreInfo_button = document.querySelector("#moreInfo-button");
+            const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
+            const video = document.querySelector("#paintandquest-video-link");
+            webButton.addEventListener('click', function (evt) {
+                console.log("click event - webButton");
+                websitePreview.setAttribute("visible", "true");
+                websitePreview.emit("appearanceScl");
+
+            });
+            chatButton.addEventListener('click', function (evt) {
+                console.log("click event - chatButton");
+                window.location.href = "https://t.me/yurak0901";
+            });
+            phoneButton.addEventListener('click', function (evt) {
+                console.log("click event - phoneButton");
+                window.open('tel:+380639656538');
+            });
+            contactButton.addEventListener('click', () => {
+                var link = document.createElement("a");
+                link.setAttribute('download', '');
+                link.href = "https://vcard.link/card/DCSf.vcf";
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            });
+            websitePreview.addEventListener('click', function (evt) {
+                window.location.href = "https://web-you.pl";
+            });
+            moreInfo_button.addEventListener('click', function (evt) {
+                window.location.href = "https://www.instagram.com/ar/774262530493419/?ch=MmMwOGU4NDFkYjFkNWFlNDVjYTBiMGY1NWUyZDA0Zjc%3D";
+            });
+            paintandquestPreviewButton.addEventListener('click', () => {
+
+
+            });
+            video.addEventListener('click', () => {
+                if (!isVideoplaying) {
+                    console.log("click event - preview");
+                    paintandquestPreviewButton.setAttribute("visible", false);
+                    video.setAttribute("src", "#paintandquest-video-mp4");
+                    video.setAttribute("visible", true);
+                    document.querySelector("#paintandquest-video-mp4").play();
+                    isVideoplaying = true;
+                } else {
+                    console.log("click event - video");
+                    paintandquestPreviewButton.setAttribute("visible", true);
+
+                    document.querySelector("#paintandquest-video-mp4").pause();
+                    video.setAttribute("visible", false);
+                    isVideoplaying = false;
+                }
+
+            });
+        }
+
+        const animateOnTargetFound = () => {
+            console.log("Start Animation trigger");
+            const chat_button = document.querySelector("#chat-button");
+            const phone_button = document.querySelector("#phone-button");
+            const website_button = document.querySelector("#website-button");
+            const contact_button = document.querySelector("#contact-button");
+            const moreInfo_button = document.querySelector("#moreInfo-button");
+            const video_panel = document.querySelector("#portfolio-panel");
+            const name_panel = document.querySelector("#name-panel");
+
+            chat_button.setAttribute("visible", "true");
+            chat_button.emit("appearanceRot");
+            chat_button.emit("appearanceScl");
+            setTimeout(() => {
+                phone_button.setAttribute("visible", "true");
+                phone_button.emit("appearanceRot");
+                phone_button.emit("appearanceScl");
+            }, 300);
+            setTimeout(() => {
+                contact_button.setAttribute("visible", "true");
+                contact_button.emit("appearanceRot");
+                contact_button.emit("appearanceScl");
+            }, 600);
+            setTimeout(() => {
+                website_button.setAttribute("visible", "true");
+                website_button.emit("appearanceRot");
+                website_button.emit("appearanceScl");
+            }, 900);
+            setTimeout(() => {
+                moreInfo_button.setAttribute("visible", "true");
+                moreInfo_button.emit("appearanceScl");
+            }, 900);
+            video_panel.emit("appearanceVis");
+            video_panel.emit("appearancePos");
+
+            video_panel.emit("appearancePos2");
+            video_panel.emit("appearanceScl");
+
+            setTimeout(() => {
+                name_panel.setAttribute("visible", "true");
+                name_panel.emit("appearancePos");
+            }, 300);
+        }
+        const onEveryTargetFound = () => {
+            console.log("start onEveryTargetFound function");
+            setTimeout(() => {
+                animateOnTargetFound();
+            }, 500);
+
+        }
+        //Runs every time whent targer lost
+        const onTargetLost = () => {
+            console.log("start onTargetLost function");
+            const chat_button = document.querySelector("#chat-button");
+            const phone_button = document.querySelector("#phone-button");
+            const website_button = document.querySelector("#website-button");
+            const video_panel = document.querySelector("#portfolio-panel");
+            const name_panel = document.querySelector("#name-panel");
+            const contact_button = document.querySelector("#contact-button");
+            const moreInfo_button = document.querySelector("#moreInfo-button");
+            const websitePreview = document.querySelector("#website-preview");
+            video_panel.emit("pauseScl");
+            video_panel.emit("pausePos2");
+            video_panel.emit("pausePos");
+            chat_button.setAttribute("visible", "false");
+            phone_button.setAttribute("visible", "false");
+            website_button.setAttribute("visible", "false");
+            video_panel.setAttribute("visible", "false");
+            name_panel.setAttribute("visible", "false");
+            contact_button.setAttribute("visible", "false");
+            video_panel.setAttribute("scale", "1.1 1.1 1.1");
+            moreInfo_button.setAttribute("visible", "false");
+            websitePreview.setAttribute("visible", "false");
+
+        }
+        var isFirstTime = false;
+        AFRAME.registerComponent('mytarget', {
+            init: function () {
+                this.el.addEventListener('targetFound', event => {
+                    console.log("target found");
+                    if (!isFirstTime) {
+                        onFirstTagretFound();
+                        isFirstTime = true;
+                    }
+                    onEveryTargetFound();
+
+                    //const avatar = document.querySelector("#avatar");
+                    //avatar.emit("rotate");
+
+                });
+                this.el.addEventListener('targetLost', event => {
+                    console.log("target was lost");
+                    onTargetLost();
+                    // const avatar = document.querySelector("#avatar");
+                    // avatar.setAttribute("rotation", "0 0 0");
+                });
+            }
+        });
+
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .example-container {
+            overflow: hidden;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        #example-scanning-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: transparent;
+            z-index: 2;
+        }
+
+        @media (min-aspect-ratio: 1/1) {
+            #example-scanning-overlay .inner {
+                width: 50vh;
+                height: 50vh;
+            }
+        }
+
+        @media (max-aspect-ratio: 1/1) {
+            #example-scanning-overlay .inner {
+                width: 80vw;
+                height: 80vw;
+            }
+        }
+
+        #example-scanning-overlay .inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+
+            background: linear-gradient(to right, white 10px, transparent 10px) 0 0,
+            linear-gradient(to right, white 10px, transparent 10px) 0 100%,
+            linear-gradient(to left, white 10px, transparent 10px) 100% 0,
+            linear-gradient(to left, white 10px, transparent 10px) 100% 100%,
+            linear-gradient(to bottom, white 10px, transparent 10px) 0 0,
+            linear-gradient(to bottom, white 10px, transparent 10px) 100% 0,
+            linear-gradient(to top, white 10px, transparent 10px) 0 100%,
+            linear-gradient(to top, white 10px, transparent 10px) 100% 100%;
+            background-repeat: no-repeat;
+            background-size: 40px 40px;
+        }
+
+        #example-scanning-overlay.hidden {
+            display: none;
+        }
+
+        #example-scanning-overlay img {
+            opacity: 0.6;
+            width: 90%;
+            align-self: center;
+        }
+
+        #example-scanning-overlay .inner .scanline {
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            background: white;
+            animation: move 2s linear infinite;
+        }
+
+        @keyframes move {
+            0%, 100% {
+                top: 0%
+            }
+            50% {
+                top: calc(100% - 10px)
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="example-container">
+    <div id="example-scanning-overlay" class="hidden">
+        <div class="inner">
+            <img src="./assets/card-example/card.png"/>
+            <div class="scanline"></div>
+        </div>
+    </div>
+
+    <a-scene
+            mindar-image="imageTargetSrc: assets/targets.mind; showStats: false; uiScanning: #example-scanning-overlay; filterMinCF:0.0001; filterBeta: 0.001;"
+            embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights"
+            vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+        <a-assets>
+            <img id="card" src="./assets/card-example/card.png"/>
+            <img id="chat-icon" src="./assets/card-example/icons/chat.png"/>
+            <img id="phone-icon" src="./assets/card-example/icons/phone.png"/>
+            <img id="website-icon" src="./assets/card-example/icons/website.png"/>
+            <img id="moreInfo-img" src="./assets/card-example/icons/moreInfo.png"/>
+            <img id="contact-icon" src="./assets/card-example/icons/addToContatc.png"/>
+            <img id="name-img" src="./assets/card-example/icons/name.png"/>
+            <img id="avatar-img" src="./assets/card-example/icons/photo.png"/>
+            <img id="avatarLong-img" src="./assets/card-example/icons/avatarLong.png"/>
+            <img id="paintandquest-preview" src="./assets/card-example/portfolio/videoPreview.png"/>
+            <img id="vector-1" src="./assets/logo/Vector.png"/>
+            <img id="vector-2" src="./assets/logo/Vector-1.png"/>
+            <img id="vector-3" src="./assets/logo/Vector-2.png"/>
+            <img id="vector-4" src="./assets/logo/Vector-3.png"/>
+            <img id="websitePreview" src="./assets/card-example/icons/websitePreview.png"/>
+            <a-asset-item id="headset" src="./assets/headset.glb"></a-asset-item>
+            <video id="paintandquest-video-mp4" loop="true" src="./assets/card-example/video.mp4"></video>
+
+
+        </a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;"
+                  raycaster="far: 10000; objects: .clickable">
+        </a-camera>
+
+        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 1">
+          
+
+            <a-entity visible="false" id="portfolio-panel" position="0 0 -0.01" scale="1.1 1.1 1.1"
+                      animation__appearanceVis="delay:600; property: visible; from: false; to: true; dur:1; startEvents: appearanceVis;"
+                      animation__appearancePos="delay:600; property: position;from:0 0 -0.01; to: 1.2 0 -0.01; pauseEvents: pausePos; startEvents: appearancePos; easing: easeInOutQuad;"
+                      animation__appearanceScl="delay:1800; property: scale;from:1.1 1.1 1.1; to: 1.6 1.6 1.6; pauseEvents: pauseScl; startEvents: appearanceScl; easing: easeInOutQuad;"
+                      animation__appearancePos2="delay:1800; property: position;from:1.2 0 -0.01; to: 1.4 -0.13 -0.01; pauseEvents: pausePos2; startEvents: appearancePos2; easing: easeInOutQuad;">
+                <a-entity id="portfolio-item0">
+                    <a-video id="paintandquest-video-link" visible="false" class="clickable" webkit-playsinline
+                             playsinline width="1" height="0.552"
+                             position="0 0 0"></a-video>
+                    <a-image id="paintandquest-preview-button" class="clickable" src="#paintandquest-preview"
+                             alpha-test="0.5" position="0 0 0" height="0.552" width="1">
+                    </a-image>
+                </a-entity>
+            </a-entity>
+            <a-entity gltf-model="#headset" scale="0.08 0.08 0.07" position="-0.2 0 0.5" rotation="50 0 0"
+                      animation="property: rotation;from:0 0 0; to:720 90 90; dur:8000; dir: alternate; easing: easeInOutQuad; loop:true;"></a-entity>
+            <a-entity visible="true" id="logo-3d" position="0.28 -0.05 0.1" rotation="0 0 -35"
+                      animation="property: scale;from:1 1 1; to: 1.03 1.03 1.03;  dir: alternate; easing: easeInOutQuad; loop:true;"
+                      animation__appearancePos="property: position;from:0 0 -0.01; to: 1.2 0 -0.01; startEvents: appearancePos; dir: alternate; easing: easeInOutQuad;">
+                <a-plane id="logo-1" visible="true" class="clickable"
+                         material="side:double; opacity:0.99; alpha-test:0.5;" src="#vector-1" position="-0.03 0 0.05"
+                         height="0.4" width="0.3479"></a-plane>
+                <a-plane id="logo-2" visible="true" class="clickable"
+                         material="side:double; opacity:0.99; alpha-test:0.5;" src="#vector-2" position="0.13 0.07 0.04"
+                         height="0.4" width="0.3479"></a-plane>
+                <a-plane id="logo-3" visible="true" class="clickable"
+                         material="side:double; opacity:0.99; alpha-test:0.5;" src="#vector-3" position="0.2 0.0 0.03"
+                         height="0.4" width="0.3479"></a-plane>
+                <a-plane id="logo-4" visible="true" class="clickable"
+                         material="side:double; opacity:0.99; alpha-test:0.5;" src="#vector-4"
+                         position="0.33 -0.03 0.02"
+                         height="0.4" width="0.3479"></a-plane>
+            </a-entity>
+            <a-plane id="chat-button" visible="false" class="clickable"
+                     material="side:double; opacity:0.99; alpha-test:0.5;" src="#chat-icon" position="-0.42 -0.5 0"
+                     height="0.20" width="0.20"
+
+                     animation__appearanceRot="property: rotation;from:0 0 0; to: 0 720 0; startEvents: appearanceRot; dir: alternate; easing: easeInOutQuad;"
+                     animation__appearanceScl="property: scale;from:0.1 0.1 0.1; to: 1 1 1; startEvents: appearanceScl; dir: alternate easing: easeInOutQuad;"></a-plane>
+            <a-plane id="phone-button" visible="false" class="clickable"
+                     material="side:double; opacity:0.99; alpha-test:0.5;" src="#phone-icon" alpha="0.9"
+                     alpha-test="0.5" position="-0.15 -0.5 0" height="0.20" width="0.20"
+
+                     animation__appearanceRot="property: rotation; from:0 0 0; to: 0 720 0; startEvents: appearanceRot; dir: alternate; easing: easeInOutQuad;"
+                     animation__appearanceScl="property: scale; from:0.1 0.1 0.1; to: 1 1 1; startEvents: appearanceScl; dir: alternate easing: easeInOutQuad;"></a-plane>
+
+            <a-plane id="contact-button" visible="false" class="clickable"
+                     material="side:double; opacity:0.99; alpha-test:0.5;" src="#contact-icon" alpha-test="0.5"
+                     position="0.12 -0.5 0" height="0.20" width="0.20"
+
+                     animation__appearanceRot=" property: rotation; from:0 0 0; to: 0 720 0; startEvents: appearanceRot; dir: alternate; easing: easeInOutQuad;"
+                     animation__appearanceScl=" property: scale; from:0.1 0.1 0.1; to: 1 1 1; startEvents: appearanceScl; dir: alternate easing: easeInOutQuad;"></a-plane>
+            <a-plane id="website-button" visible="false" class="clickable"
+                     material="side:double; opacity:0.99; alpha-test:0.5;" src="#website-icon" alpha-test="0.5"
+                     position="0.39 -0.5 0" height="0.20" width="0.20"
+
+                     animation__appearanceRot=" property: rotation; from:0 0 0; to: 0 720 0; startEvents: appearanceRot; dir: alternate; easing: easeInOutQuad;"
+                     animation__appearanceScl=" property: scale; from:0.1 0.1 0.1; to: 1 1 1; startEvents: appearanceScl; dir: alternate easing: easeInOutQuad;"></a-plane>
+            <a-plane id="website-preview" visible="false" class="clickable"
+                     material="side:double; opacity:0.99; alpha-test:0.5;" src="#websitePreview" alpha-test="0.5"
+                     position="1.2 -1.98 0" height="1.284" width="1" scale="2 2 2"
+                     animation__appearanceScl=" property: scale; from:2 0.1 2; to:  2 2 2; dur:300; startEvents: appearanceScl; dir: alternate easing: easeInOutQuad;"></a-plane>
+
+            <a-plane id="moreInfo-button" visible="false" class="clickable"
+                     material="side:double; opacity:0.99; alpha-test:0.5;"
+                     src="#moreInfo-img" alpha-test="0.5" position="-0.22 -0.75 0"
+                     height="0.1225" width="0.6025"
+                     animation__appearanceScl=" property: scale; from:0.1 0.1 0.1; to: 1 1 1; startEvents: appearanceScl; dir: alternate easing: easeInOutQuad;"></a-plane>
+            <a-entity id="name-panel" position="-0.38 0 -0.1" scale="1.8 1.8 1.8" visible="false"
+                      animation__appearancePos="property: position;from:-0.37 0 -0.01; to: -0.37 0.6 0; startEvents: appearancePos; dir: alternate; easing: easeInOutQuad;">
+                <a-plane scale="0.8 0.8 0.8" id="avatar" class="clickable" src="#avatarLong-img" alpha-test="0.5"
+                         position="0 0 0"
+                         height="0.28"
+                         width="0.20"
+                ></a-plane>
+                <a-plane id="name" class="clickable" material="side:double; opacity:0.99; alpha-test:0.5;"
+                         src="#name-img"
+                         alpha-test="0.5" position="0.32 0 0"
+                         height="0.20" width="0.373"></a-plane>
+            </a-entity>
+
+        </a-entity>
+
+    </a-scene>
+</div>
+</body>
+</html>
